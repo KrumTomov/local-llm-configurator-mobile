@@ -1,0 +1,20 @@
+{
+  "name": "local-llm-configurator",
+  "version": "1.0.0",
+  "description": "Local LLM Configurator app: Node.js + React + Expo",
+  "private": true,
+  "license": "ISC",
+  "author": "Krum Tomov",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run dev --workspaces --parallel",
+    "build": "npm run build --workspaces",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [
+    "local-llm-configurator-web",
+    "local-llm-configurator-mobile",
+    "local-llm-configurator-shared"
+  ]
+}

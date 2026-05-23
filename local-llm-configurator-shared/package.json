@@ -1,0 +1,6 @@
+{
+  "name": "local-llm-configurator-shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js"
+}
