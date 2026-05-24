@@ -8,7 +8,6 @@ import {
   timestamp,
   uniqueIndex,
   index,
-  foreignKey,
   pgEnum,
   serial,
   smallint,

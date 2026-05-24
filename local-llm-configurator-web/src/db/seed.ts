@@ -1,3 +1,4 @@
+import { randomBytes, scryptSync } from 'crypto';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
@@ -18,14 +19,12 @@ function randomString(length: number): string {
   return Math.random().toString(36).substring(2, 2 + length);
 }
 
-// Helper to generate random email
-function randomEmail(): string {
-  return `user${Math.random().toString(36).substring(7)}@example.com`;
-}
-
-// Helper to generate password hash (bcrypt-like format for demo)
+// Helper to generate password hash for demo users. Default password: Password123
 function generatePasswordHash(): string {
-  return `$2b$10$${randomString(53)}`;
+  const salt = randomBytes(16).toString('hex');
+  const hash = scryptSync('Password123', salt, 64).toString('hex');
+
+  return `scrypt$${salt}$${hash}`;
 }
 
 async function seed() {
@@ -329,7 +328,7 @@ async function seed() {
 
     // Seed Users (100 users)
     console.log('👥 Seeding users...');
-    const users = [];
+    const users: Array<typeof schema.users.$inferInsert> = [];
     for (let i = 0; i < 100; i++) {
       users.push({
         email: `user${i + 1}@example.com`,
@@ -365,7 +364,7 @@ async function seed() {
 
     // Seed Device Profiles (150 total across users)
     console.log('💻 Seeding device profiles...');
-    const deviceProfiles = [];
+    const deviceProfiles: Array<typeof schema.deviceProfiles.$inferInsert> = [];
     for (let i = 0; i < 150; i++) {
       const user = createdUsers[i % createdUsers.length];
       const gpuOptions = ['NVIDIA RTX 4090', 'NVIDIA RTX 3090', 'AMD RX 7900', 'Apple M2', 'Intel Arc', null];
@@ -392,7 +391,7 @@ async function seed() {
 
     // Seed Model Configurations (500 configurations)
     console.log('⚙️ Seeding model configurations...');
-    const configurations = [];
+    const configurations: Array<typeof schema.modelConfigurations.$inferInsert> = [];
     for (let i = 0; i < 500; i++) {
       const user = createdUsers[i % createdUsers.length];
       const model = models[i % models.length];
@@ -434,7 +433,7 @@ async function seed() {
 
     // Seed Benchmarks (1500 benchmarks)
     console.log('📊 Seeding benchmarks...');
-    const benchmarks = [];
+    const benchmarks: Array<typeof schema.benchmarks.$inferInsert> = [];
     const benchmarkPrompts = [
       'What is the capital of France?',
       'Explain quantum computing in simple terms.',
@@ -463,12 +462,12 @@ async function seed() {
         benchmarkName: `Benchmark ${i + 1}`,
         benchmarkPrompt: prompt,
         benchmarkResult: `Result for: ${prompt}`,
-        tokensPerSecond: (Math.random() * 100 + 10).toFixed(2),
-        latencyMs: (Math.random() * 5000 + 100).toFixed(2),
-        ttftMs: (Math.random() * 500 + 50).toFixed(2),
+        tokensPerSecond: Number((Math.random() * 100 + 10).toFixed(2)),
+        latencyMs: Number((Math.random() * 5000 + 100).toFixed(2)),
+        ttftMs: Number((Math.random() * 500 + 50).toFixed(2)),
         vramUsedMb: Math.floor(Math.random() * 8000) + 1024,
         ramUsedMb: Math.floor(Math.random() * 16000) + 2048,
-        cpuUsagePercent: (Math.random() * 100).toFixed(2),
+        cpuUsagePercent: Number((Math.random() * 100).toFixed(2)),
         completionTokens: Math.floor(Math.random() * 500) + 50,
         promptTokens: Math.floor(Math.random() * 100) + 10,
         notes: `Benchmark run on ${device.osName}`,
@@ -483,7 +482,7 @@ async function seed() {
 
     // Seed Prompt Templates (300 templates)
     console.log('📝 Seeding prompt templates...');
-    const templates = [];
+    const templates: Array<typeof schema.promptTemplates.$inferInsert> = [];
     const categories = [
       'general',
       'coding',
@@ -518,7 +517,7 @@ async function seed() {
 
     // Seed Agent Presets (200 agents)
     console.log('🤖 Seeding agent presets...');
-    const agents = [];
+    const agents: Array<typeof schema.agentPresets.$inferInsert> = [];
 
     for (let i = 0; i < 200; i++) {
       const user = createdUsers[i % createdUsers.length];
@@ -554,8 +553,8 @@ async function seed() {
 
     // Seed Model Sessions (2000 sessions for pagination testing)
     console.log('🔄 Seeding model sessions...');
-    const sessions = [];
-    const statuses: Array<typeof schema.sessionStatusEnum> = [
+    const sessions: Array<typeof schema.modelSessions.$inferInsert> = [];
+    const statuses: Array<(typeof schema.sessionStatusEnum.enumValues)[number]> = [
       'completed',
       'active',
       'paused',
@@ -584,7 +583,7 @@ async function seed() {
         configurationId: config.id,
         agentPresetId: agent.id,
         sessionName: `Session ${i + 1}`,
-        status: status as any,
+        status,
         startedAt,
         endedAt,
         totalTokensUsed: Math.floor(Math.random() * 10000),
@@ -606,7 +605,7 @@ async function seed() {
 
     // Seed Session Messages (5000 messages)
     console.log('💬 Seeding session messages...');
-    const messages = [];
+    const messages: Array<typeof schema.sessionMessages.$inferInsert> = [];
 
     for (let i = 0; i < 5000; i++) {
       const session = createdSessions[i % createdSessions.length];
@@ -630,8 +629,8 @@ async function seed() {
 
     // Seed System Logs (3000 logs)
     console.log('📋 Seeding system logs...');
-    const logs = [];
-    const eventTypes: Array<typeof schema.logEventTypeEnum> = [
+    const logs: Array<typeof schema.systemLogs.$inferInsert> = [];
+    const eventTypes: Array<(typeof schema.logEventTypeEnum.enumValues)[number]> = [
       'model_execution',
       'benchmark_execution',
       'authentication',
@@ -640,7 +639,7 @@ async function seed() {
       'configuration_change',
       'session_event',
     ];
-    const levels: Array<typeof schema.logLevelEnum> = [
+    const levels: Array<(typeof schema.logLevelEnum.enumValues)[number]> = [
       'debug',
       'info',
       'warning',
@@ -655,8 +654,8 @@ async function seed() {
 
       logs.push({
         userId: user.id,
-        eventType: eventType as any,
-        level: level as any,
+        eventType,
+        level,
         title: `${eventType}: Event ${i + 1}`,
         message: `Details about the ${eventType} event`,
         ipAddress: `192.168.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`,
@@ -673,7 +672,7 @@ async function seed() {
 
     // Seed API Keys (50 keys)
     console.log('🔑 Seeding API keys...');
-    const keys = [];
+    const keys: Array<typeof schema.apiKeys.$inferInsert> = [];
     for (let i = 0; i < 50; i++) {
       const user = createdUsers[i % createdUsers.length];
       keys.push({

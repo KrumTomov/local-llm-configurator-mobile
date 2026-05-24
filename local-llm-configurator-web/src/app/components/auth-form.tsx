@@ -10,14 +10,48 @@ type AuthFormProps = {
 export function AuthForm({ mode }: AuthFormProps) {
   const isRegister = mode === "register";
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
+  const [isPending, setIsPending] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus(
-      isRegister
-        ? "Registration details are ready to submit."
-        : "Login details are ready to submit.",
-    );
+    setError("");
+    setStatus(isRegister ? "Creating your account..." : "Signing you in...");
+    setIsPending(true);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+      const response = await fetch(`/api/auth/${mode}`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+
+        setStatus("");
+        setError(payload?.message ?? "Something went wrong. Please try again.");
+        setIsPending(false);
+        return;
+      }
+
+      setStatus(isRegister ? "Account created." : "Login successful.");
+      window.location.assign("/dashboard");
+    } catch {
+      setStatus("");
+      setError("Unable to connect to the auth service. Please try again.");
+      setIsPending(false);
+    }
   }
 
   return (
@@ -94,13 +128,23 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       <button
         type="submit"
+        disabled={isPending}
         className="mt-6 h-11 w-full rounded-md bg-cyan-700 px-4 text-sm font-semibold text-white transition hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-700/30"
       >
-        {isRegister ? "Register" : "Login"}
+        {isPending
+          ? isRegister
+            ? "Creating account..."
+            : "Signing in..."
+          : isRegister
+            ? "Register"
+            : "Login"}
       </button>
 
       {status ? (
         <p className="mt-4 text-sm font-medium text-cyan-800">{status}</p>
+      ) : null}
+      {error ? (
+        <p className="mt-4 text-sm font-medium text-red-700">{error}</p>
       ) : null}
 
       <p className="mt-6 text-sm text-slate-600">
