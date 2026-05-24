@@ -14,6 +14,11 @@ type SessionPayload = {
   role: User["role"];
 };
 
+type JwtPayload = SessionPayload & {
+  exp: number;
+  iat: number;
+};
+
 export function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
   const hash = scryptSync(password, salt, 64).toString("hex");
@@ -63,6 +68,43 @@ export function readSessionToken(token?: string): SessionPayload | null {
   }
 }
 
+export function createJwtToken(user: SessionPayload, expiresInSeconds = 60 * 60) {
+  const now = Math.floor(Date.now() / 1000);
+  const header = encodeJson({ alg: "HS256", typ: "JWT" });
+  const payload = encodeJson({
+    ...user,
+    iat: now,
+    exp: now + expiresInSeconds,
+  });
+  const signature = sign(`${header}.${payload}`);
+
+  return `${header}.${payload}.${signature}`;
+}
+
+export function readJwtToken(token?: string): JwtPayload | null {
+  if (!token) {
+    return null;
+  }
+
+  const [header, payload, signature] = token.split(".");
+
+  if (!header || !payload || !signature || sign(`${header}.${payload}`) !== signature) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as JwtPayload;
+
+    if (!parsed.exp || parsed.exp < Math.floor(Date.now() / 1000)) {
+      return null;
+    }
+
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
 export async function getCurrentSession() {
   const cookieStore = await cookies();
 
@@ -73,6 +115,10 @@ export const sessionCookieName = SESSION_COOKIE;
 
 function sign(value: string) {
   return createHmac("sha256", getSessionSecret()).update(value).digest("base64url");
+}
+
+function encodeJson(value: unknown) {
+  return Buffer.from(JSON.stringify(value)).toString("base64url");
 }
 
 function getSessionSecret() {
