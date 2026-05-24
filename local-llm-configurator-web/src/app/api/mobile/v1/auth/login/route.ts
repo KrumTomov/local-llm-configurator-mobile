@@ -30,7 +30,12 @@ export async function POST(request: Request) {
       .where(eq(users.id, user.id));
 
     return mobileSuccess({
-      accessToken: createJwtToken(user),
+      accessToken: createJwtToken({
+        id: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        role: user.role,
+      }),
       tokenType: "Bearer",
       expiresIn: 3600,
       user: {

@@ -45,7 +45,12 @@ export async function POST(request: Request) {
         status: "active",
       })
       .returning();
-    const accessToken = createJwtToken(user);
+    const accessToken = createJwtToken({
+      id: user.id,
+      email: user.email,
+      displayName: user.displayName,
+      role: user.role,
+    });
 
     return mobileSuccess(
       {
