@@ -24,9 +24,12 @@ export function PageShell({
 }) {
   return (
     <section className="flex flex-1 bg-slate-50">
-      <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+      <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-800">
+              NeuroForge
+            </p>
             <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
               {title}
             </h1>

@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #061014;
+  --foreground: #e8fbff;
+  --panel: rgba(9, 24, 31, 0.86);
+  --panel-strong: rgba(12, 34, 43, 0.94);
+  --line: rgba(92, 246, 255, 0.16);
+  --muted: #8ea8b3;
+  --accent: #20e0f0;
+  --accent-strong: #00a8bd;
+  --success: #41f0a8;
 }
 
 @theme inline {
@@ -12,15 +19,91 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    linear-gradient(rgba(32, 224, 240, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 224, 240, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 20% 0%, rgba(32, 224, 240, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 12%, rgba(65, 240, 168, 0.12), transparent 28%),
+    #061014;
+  background-size: 44px 44px, 44px 44px, auto, auto, auto;
+}
+
+::selection {
+  background: rgba(32, 224, 240, 0.28);
+}
+
+.bg-slate-50,
+.bg-white {
+  background-color: var(--panel) !important;
+}
+
+.bg-slate-100 {
+  background-color: rgba(20, 49, 60, 0.88) !important;
+}
+
+.bg-cyan-50 {
+  background-color: rgba(32, 224, 240, 0.1) !important;
+}
+
+.border-slate-100,
+.border-slate-200,
+.border-slate-300 {
+  border-color: var(--line) !important;
+}
+
+.text-slate-950,
+.text-black {
+  color: var(--foreground) !important;
+}
+
+.text-slate-800,
+.text-slate-700 {
+  color: #cde9ef !important;
+}
+
+.text-slate-600,
+.text-slate-500 {
+  color: var(--muted) !important;
+}
+
+.text-cyan-800,
+.text-cyan-900 {
+  color: var(--accent) !important;
+}
+
+.bg-cyan-700 {
+  background-color: var(--accent-strong) !important;
+}
+
+.hover\:bg-cyan-800:hover {
+  background-color: #08798a !important;
+}
+
+.hover\:bg-slate-100:hover {
+  background-color: rgba(22, 56, 68, 0.92) !important;
+}
+
+input,
+select,
+textarea {
+  background: rgba(3, 13, 17, 0.78) !important;
+  border-color: rgba(92, 246, 255, 0.2) !important;
+  color: var(--foreground) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #70909a;
 }

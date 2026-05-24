@@ -60,13 +60,16 @@ export function AuthForm({ mode }: AuthFormProps) {
       className="w-full max-w-md rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
     >
       <div className="mb-6">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-800">
+          NeuroForge
+        </p>
         <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
           {isRegister ? "Create account" : "Welcome back"}
         </h1>
         <p className="mt-2 text-sm leading-6 text-slate-600">
           {isRegister
-            ? "Register to start planning your LLM deployment environment."
-            : "Sign in to continue configuring your LLM infrastructure."}
+            ? "Create your NeuroForge operator profile."
+            : "Sign in to enter the NeuroForge control center."}
         </p>
       </div>
 

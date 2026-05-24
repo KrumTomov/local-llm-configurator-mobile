@@ -9,8 +9,8 @@ export default async function DashboardPage() {
 
   return (
     <PageShell
-      title={`Welcome, ${session.displayName}`}
-      description="NeuroForge control center for local and hybrid LLM infrastructure."
+      title={`Operations grid: ${session.displayName}`}
+      description="Monitor model sessions, benchmark throughput, agent readiness, and infrastructure activity from the NeuroForge command deck."
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <Metric label="Models" value={overview.totals.models} />
@@ -22,7 +22,12 @@ export default async function DashboardPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-950">Performance Center</h2>
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-lg font-semibold text-slate-950">Performance Center</h2>
+            <span className="rounded-md border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 font-mono text-xs text-cyan-300">
+              LIVE
+            </span>
+          </div>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <Metric
               label="Avg tokens/sec"
@@ -78,7 +83,7 @@ function Metric({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
       <p className="text-sm font-medium text-slate-500">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-slate-950">{value}</p>
+      <p className="mt-2 font-mono text-2xl font-semibold text-slate-950">{value}</p>
     </div>
   );
 }

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Local LLM Configurator",
-  description: "Plan local and hybrid LLM infrastructure deployments.",
+  title: "NeuroForge",
+  description: "AI infrastructure control center for local and hybrid LLMs.",
 };
 
 export default function RootLayout({
@@ -30,13 +30,21 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-slate-50 text-slate-950">
         <div className="flex min-h-screen flex-col">
-          <header className="border-b border-slate-200 bg-white">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
+          <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
               <Link
                 href="/"
-                className="text-lg font-semibold tracking-tight text-slate-950"
+                className="flex items-center gap-3 text-lg font-semibold tracking-tight text-slate-950"
               >
-                Local LLM Configurator
+                <span className="grid size-9 place-items-center rounded-md border border-cyan-400/30 bg-cyan-400/10 font-mono text-sm text-cyan-300">
+                  NF
+                </span>
+                <span>
+                  NeuroForge
+                  <span className="block text-xs font-medium uppercase tracking-[0.22em] text-slate-500">
+                    AI Control Center
+                  </span>
+                </span>
               </Link>
               <nav
                 aria-label="Primary navigation"
@@ -82,10 +90,10 @@ export default function RootLayout({
             </div>
           </header>
           <main className="flex flex-1 flex-col">{children}</main>
-          <footer className="border-t border-slate-200 bg-white">
-            <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-sm text-slate-600 sm:px-6 md:flex-row md:items-center md:justify-between">
-              <p>Local and hybrid LLM infrastructure planning.</p>
-              <p>Built for private AI operations.</p>
+          <footer className="border-t border-slate-200 bg-white/90">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-4 py-5 text-sm text-slate-600 sm:px-6 md:flex-row md:items-center md:justify-between">
+              <p>NeuroForge AI infrastructure control center.</p>
+              <p>Local, hybrid, benchmarked, orchestrated.</p>
             </div>
           </footer>
         </div>
