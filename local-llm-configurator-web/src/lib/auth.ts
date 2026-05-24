@@ -1,5 +1,7 @@
 import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 
+import { cookies } from "next/headers";
+
 import type { User } from "@/db/schema";
 
 const SESSION_COOKIE = "llm_configurator_session";
@@ -59,6 +61,12 @@ export function readSessionToken(token?: string): SessionPayload | null {
   } catch {
     return null;
   }
+}
+
+export async function getCurrentSession() {
+  const cookieStore = await cookies();
+
+  return readSessionToken(cookieStore.get(sessionCookieName)?.value);
 }
 
 export const sessionCookieName = SESSION_COOKIE;

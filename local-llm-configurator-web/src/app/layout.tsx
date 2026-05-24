@@ -49,6 +49,24 @@ export default function RootLayout({
                   Home
                 </Link>
                 <Link
+                  href="/dashboard"
+                  className="rounded-md px-3 py-2 text-center text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/models"
+                  className="rounded-md px-3 py-2 text-center text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
+                >
+                  Models
+                </Link>
+                <Link
+                  href="/benchmarks"
+                  className="rounded-md px-3 py-2 text-center text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
+                >
+                  Benchmarks
+                </Link>
+                <Link
                   href="/login"
                   className="rounded-md px-3 py-2 text-center text-slate-700 transition hover:bg-slate-100 hover:text-slate-950"
                 >
