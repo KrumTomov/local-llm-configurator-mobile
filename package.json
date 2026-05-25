@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "npm run dev --workspaces --parallel",
     "build": "npm run build --workspaces",
+    "build:web": "npm run build --workspace=local-llm-configurator-web",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
